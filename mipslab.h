@@ -12,6 +12,8 @@ void display_image(int x, const uint8_t *data);
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
+void display_screen(const uint8_t *data);
+void enable_pixel(int x, int y);
 uint8_t spi_send_recv(uint8_t data);
 
 /* Declare lab-related functions from mipslabfunc.c */
@@ -39,6 +41,8 @@ void display_debug( volatile int * const addr );
 extern const uint8_t const font[128*8];
 /* Declare bitmap array containing icon */
 extern const uint8_t const icon[128];
+/* Declare bitmap array containing screen */
+extern uint8_t screen[128*4];
 /* Declare text buffer for display output */
 extern char textbuffer[4][16];
 

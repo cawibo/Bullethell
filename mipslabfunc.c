@@ -156,8 +156,30 @@ void display_image(int x, const uint8_t *data) {
 		DISPLAY_CHANGE_TO_DATA_MODE;
 		
 		for(j = 0; j < 32; j++)
-			spi_send_recv(~data[i*32 + j]);
+			spi_send_recv(data[i*32 + j]);
 	}
+}
+
+void display_screen(const uint8_t *data) {
+  int i;
+
+  for(i = 0; i < 4; i++) {
+    display_image(32*i, &data[128*i]);
+  }
+}
+
+void enable_pixel(int x, int y) {
+  int sect;
+  int squareX, squareY;
+  int bar, bit;
+
+  sect = x/32;
+  squareX = (x%32)/8;
+  squareY = y/8;
+  bar = x%8;
+  bit = y%8;
+
+  screen[128*sect + 8*4*squareY + 8*squareX + bar] |= 1;
 }
 
 void display_update(void) {
