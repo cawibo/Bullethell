@@ -6,6 +6,8 @@ void clear(void);
 void update(void);
 void blip(void);
 void draw(void);
+uint8_t has_ended(void);
+void clear_collision(void);
 
 /* Declare 2D int array used for collision detection */
 extern uint8_t collision[128][32];

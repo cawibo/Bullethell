@@ -18,6 +18,10 @@ void move_down_player(struct player *p) {
 	if(p->y + p->height < 32) move_player(p, 1);
 }
 
+void set_collision_player(struct player p) {
+	collision[p.x][p.y] |= 1;
+}
+
 uint8_t check_collision_player(struct player *p) {
 	return check_collision_body(p->x, p->y, p->width, p->height);
 }

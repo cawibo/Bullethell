@@ -31,8 +31,9 @@ void collision_set_enemy(struct enemy e) {
     for(x = e.x - e.width; x <= e.x + e.width; x++) {
         for(y = e.y - e.height; y <= e.y + e.height; y++) {
             if(within_bounds(x, y)) {
-                if(collision[x][y]) collision[x][y] |= 2;
-                else collision[x][y] |= 1;
+                collision[x][y] |= 1;
+                // if(collision[x][y] & 1) collision[x][y] |= 2;
+                // else collision[x][y] |= 1;
             }
         }
     }

@@ -11,16 +11,25 @@ void run() {
         draw();
 
         delay(200);
+
+        if (has_ended()) break;
     }
+
+
+}
+
+uint8_t has_ended() {
+    return check_collision_player(&p);
 }
 
 void clear() {
     clear_screen();
+    clear_collision();
 }
 
 void update() {
-    update_player(&p);
     update_enemies();
+    update_player(&p);
 }
 
 void blip() {
@@ -41,7 +50,7 @@ void move_enemies() {
 }
 
 uint8_t check_collision_pixel(int x, int y) {
-    return collision[x][y] & 2;
+    return (collision[x][y] & 1);
 }
 
 uint8_t check_collision_body(int x, int y, int width, int height) {
@@ -76,6 +85,12 @@ struct enemy enemies[10] = {
     {140, 10, 4, 3, 3},
     {152, 25, 4, 3, 3}
 };
+
+void clear_collision() {
+    int i;
+    int j;
+    for(i = 0; i < 128; i++) for(j = 0; j < 32; j++) collision[i][j] = 0;
+}
 
 uint8_t collision[128][32] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
