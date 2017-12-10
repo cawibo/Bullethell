@@ -19,7 +19,6 @@ int btn_pressed(int b) {
 
 void display_screen(const uint8_t *data) {
   int i;
-
   for(i = 0; i < 4; i++) {
     display_image(32*i, &data[128*i]);
   }

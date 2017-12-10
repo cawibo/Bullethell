@@ -3,17 +3,20 @@
 #include "mipslab.h"  /* Declatations for these labs */
 #include "project.h"
 
+struct player p = {5, 10, 2, 2};
 
 void move_player(struct player *p, int i) {
 	p->y += i;
+	if(p->y - p->height < 0) p->y = p->height;
+	if(p->y + p->height > 32) p->y = 32 - p->height;
 }
 
 void move_up_player(struct player *p) {
-	if(p->y - p->height > 0) move_player(p, -1);
+	if(p->y - p->height > 0) move_player(p, -3);
 }
 
 void move_down_player(struct player *p) {
-	if(p->y + p->height < 32) move_player(p, 1);
+	if(p->y + p->height < 32) move_player(p, 3);
 }
 
 void set_collision_player(struct player p) {

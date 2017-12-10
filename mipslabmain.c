@@ -32,6 +32,7 @@ int main(void) {
 	ODCG = 0x0;
 	TRISFCLR = 0x70;
 	TRISGCLR = 0x200;
+	TRISE &= ~0xff;
 	
 	/* Set up input pins */
 	TRISDSET = (1 << 8);

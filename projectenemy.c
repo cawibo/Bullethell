@@ -52,5 +52,11 @@ uint8_t check_collision_enemy(struct enemy e) {
 
 // void reset(struct enemy *);
 void reset_enemy(struct enemy *e) {
-    e->x = 128;
+    score += 2;
+
+    e->height = 2 + new_rnd()%5;
+    e->y = e->height + new_rnd() % (31 - e->height) ;
+    e-> width = 3 + new_rnd()%5;
+    e->x = 128 + e->width;
+    e->speed = 2 + new_rnd()%5;
 }

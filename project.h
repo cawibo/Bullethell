@@ -2,7 +2,7 @@
 /*
 	GAME
 */
-typedef enum {INITIAL, MENU, GAME, CLOSING, CREDITS} State;
+typedef enum {INITIAL, MENU, GAME, OPTIONS, CREDITS} State;
 typedef struct menu_item {
 	char name[16];
 	State target;
@@ -25,13 +25,20 @@ void run_menu(void);
 void init_game(void);
 void run_game(void);
 void clear_game(void);
+
+void run_options(void);
 void run(void);
 void init_credits(void);
 void run_credits(void);
 void clear_credits(void);
+void clear_score(void);
+void clear_enemies(void);
+int new_rnd();
 extern uint8_t selected_menu_item;
 extern uint8_t menu_size;
 extern menu_item menu_items[];
+extern uint8_t score;
+extern uint8_t inverted_colors;
 
 /* Declare 2D int array used for collision detection */
 extern uint8_t collision[128][32];
@@ -54,6 +61,7 @@ uint8_t collision_check_enemy(struct enemy);
 void reset_enemy(struct enemy *);
 void update_enemies(void);
 void blip_enemies(void);
+extern const uint8_t enemies_size;
 extern struct enemy enemies[];
 
 /*

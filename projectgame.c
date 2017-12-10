@@ -3,10 +3,26 @@
 #include "mipslab.h"  /* Declatations for these labs */
 #include "project.h"
 
-State state = GAME;
+State state = INITIAL;
+uint8_t score = 0;
+
+int pr = 1;
+int new_rnd() {
+    pr = (37 * pr + 7) % 4721;
+    return (int)pr;
+}
 
 void run() {
     while( 1 ) {
+		if(state == INITIAL) {
+			state = MENU;
+			
+			display_string(0, "BULLETHELL");
+			display_string(1, "GOTY Edition");
+			display_update();
+			
+			delay(3000);
+		}
         if(state == MENU) {
             init_menu();
             run_menu();
@@ -22,12 +38,33 @@ void run() {
             run_credits();
             clear_credits();
         }
+		if(state == OPTIONS) {
+			run_options();
+		}
     }
 }
 
-uint8_t menu_size = 2;
-menu_item menu_items[2] = {
+uint8_t inverted_colors = 0;
+void run_options() {
+	display_string(0, "");
+	display_string(1, "Btn4: Toggle");
+	display_string(2, "Btn2: Leave");
+	display_update();
+	
+	while(state == OPTIONS) {
+		if(btn_4_pressed()) {
+			inverted_colors = ~(1 & inverted_colors);
+			break;
+		}
+		if(btn_2_pressed()) break;
+	}
+	state = MENU;
+}
+
+uint8_t menu_size = 3;
+menu_item menu_items[3] = {
     {"[ ] Start Game", GAME},
+	{"[ ] Options", OPTIONS},
     {"[ ] Credits", CREDITS}
 };
 uint8_t selected_menu_item = 0;
@@ -51,20 +88,13 @@ void clear_menu() {
     // clear_screen();
 }
 
-player p;
-enemy enemies[3];
-
 void init_game() {
-    p.x = 5; p.y = 10; p.width = 2; p.height = 2;
-
-    enemy enemies[3] = {
-        {128, 8, 4, 3, 3},
-        {140, 10, 7, 3, 3},
-        {152,25,4,3,3}
-    };
+	clear_game();
+	clear_score();
 }
 
 void run_game() {
+    uint8_t counter = 0;
     while(state == GAME) {
         // clear();
         clear_screen();
@@ -79,10 +109,17 @@ void run_game() {
         blip_enemies();
 
         // // draw();
-        // display_update();
+		if(inverted_colors) {
+			uint32_t i;
+			uint32_t *ptr = ((uint32_t*)screen);
+			for(i = 0; i < 128; i++, ptr++)
+				*ptr = ~*ptr;
+		}
         display_screen(screen);
-        
 
+        counter = (++counter % 5);
+        if(counter == 0) score += 1;
+        PORTE = score;
         delay(200);
         if(btn_3_pressed() || has_ended()) break;
     }
@@ -91,7 +128,10 @@ void run_game() {
 
 void clear_game() {
     // TODO store score
-    clear();
+    // clear();
+    clear_screen();
+    clear_collision();
+	clear_enemies();
 }
 
 void init_credits() {
@@ -102,6 +142,7 @@ void run_credits() {
     while(state == CREDITS) {
         display_string(0, "BULLETHELL");
         display_string(1, "Caroline Borg");
+		display_string(2, "");
         display_update();
         
         delay(200);
@@ -141,6 +182,12 @@ uint8_t has_ended() {
 void clear() {
     clear_screen();
     clear_collision();
+    clear_enemies();
+    clear_score();
+}
+
+void clear_score() {
+	score = 0;
 }
 
 void update() {
@@ -161,7 +208,7 @@ void draw() {
 void move_enemies() {
     int i;
     struct enemy* ptr = enemies;
-    for(i=0; i < 10; i++, ptr++) {
+    for(i=0; i < enemies_size; i++, ptr++) {
         move_left_enemy(ptr);
     }
 }
@@ -183,7 +230,7 @@ uint8_t check_collision_body(int x, int y, int width, int height) {
 void update_enemies() {
     int i;
     struct enemy* ptr = enemies;
-    for(i=0; i < 10; i++, ptr++) {
+    for(i=0; i < enemies_size; i++, ptr++) {
         update_enemy(ptr);
     }
 }
@@ -191,10 +238,32 @@ void update_enemies() {
 void blip_enemies() {
     int i;
     struct enemy* ptr = enemies;
-    for(i=0; i < 10; i++, ptr++) {
+    for(i=0; i < enemies_size; i++, ptr++) {
         blip_enemy(*ptr);
     }
 }
+
+void clear_enemies() {
+	int i;
+	for(i = 0; i < enemies_size; i++) {
+		enemies[i].x = 128 + i*12;
+		enemies[i].y = 6 + i*6;
+		enemies[i].speed = 4;
+		enemies[i].width = 3;
+		enemies[i].height = 3;
+	}
+}
+
+const uint8_t enemies_size = 4;
+struct enemy enemies[4] = {
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0}
+};
+
+
+
 
 void clear_collision() {
     int i;
