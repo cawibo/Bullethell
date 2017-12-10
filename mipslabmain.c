@@ -8,13 +8,15 @@
    For copyright and licensing, see file COPYING */
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
+#include <stdlib.h>
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
+#include "project.h"
 
 int main(void) {
 	/* Set up peripheral bus clock */
-        /* OSCCONbits.PBDIV = 1; */
-        OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */
+    /* OSCCONbits.PBDIV = 1; */
+    OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */
 	OSCCONSET = 0x080000; /* set PBDIV bit 0 */
 	
 	/* Set up output pins */
@@ -41,26 +43,48 @@ int main(void) {
 	/* SPI2STAT bit SPIROV = 0; */
 	SPI2STATCLR = 0x40;
 	/* SPI2CON bit CKP = 1; */
-        SPI2CONSET = 0x40;
+    SPI2CONSET = 0x40;
 	/* SPI2CON bit MSTEN = 1; */
 	SPI2CONSET = 0x20;
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
 	
 	display_init();
-	display_string(0, "KTH/ICT lab");
-	display_string(1, "in Computer");
-	display_string(2, "Engineering");
-	display_string(3, "Welcome!");
 	display_update();
 	
-	display_image(96, icon);
-	
-	labinit(); /* Do any lab-specific initialization */
+	// display_image(0, icon);
+	// display_image(32, icon);
+	// display_image(64, icon);
+	// display_image(96, icon);
+	// enable_pixel(0, 0);
+	// enable_pixel(32, 0);
+	// enable_pixel(64, 0);
+	// enable_pixel(96, 0);
+	// enable_pixel(0, 16);
+	// enable_pixel(32, 16);
+	// enable_pixel(64, 16);
+	// enable_pixel(96, 16);
 
-	while( 1 )
-	{
-	  labwork(); /* Do lab-specific things again and again */
-	}
+	// int i;
+	// for(i = 0; i < 128; i++) enable_pixel(i, 0);
+	// for(i = 0; i < 128; i++) enable_pixel(i, 8);
+	// for(i = 0; i < 128; i++) enable_pixel(i, 16);
+	// for(i = 0; i < 128; i++) enable_pixel(i, 31);
+
+	display_screen(screen);
+	display_update();
+
+	// display_update();
+	
+
+	labinit(); /* Do any lab-specific initialization */
+	
+	// int btns = getbtns();
+	// char buf[8];
+	// display_string(1, buf);
+
+	State state = MENU;
+
+	run();
 	return 0;
 }

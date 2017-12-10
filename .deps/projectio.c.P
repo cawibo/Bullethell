@@ -1,14 +1,14 @@
-mipslabmain.c.o: mipslabmain.c /opt/mcb32tools/include/stdint.h \
+projectio.c.o: projectio.c /opt/mcb32tools/include/stdint.h \
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stdint-gcc.h \
  /opt/mcb32tools/include/stdlib.h /opt/mcb32tools/include/klibc/extern.h \
  /opt/mcb32tools/include/klibc/inline.h \
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stddef.h \
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stdbool.h \
- /opt/mcb32tools/include/pic32mx.h mipslab.h project.h
-mipslabmain.c /opt/mcb32tools/include/stdint.h :
+ /opt/mcb32tools/include/pic32mx.h project.h
+projectio.c /opt/mcb32tools/include/stdint.h :
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stdint-gcc.h :
  /opt/mcb32tools/include/stdlib.h /opt/mcb32tools/include/klibc/extern.h :
  /opt/mcb32tools/include/klibc/inline.h :
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stddef.h :
  /opt/mcb32tools/lib/gcc/mipsel-mcb32-elf/4.9.2/include/stdbool.h :
- /opt/mcb32tools/include/pic32mx.h mipslab.h project.h :
+ /opt/mcb32tools/include/pic32mx.h project.h :
