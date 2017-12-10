@@ -52,38 +52,7 @@ int main(void) {
 	display_init();
 	display_update();
 	
-	// display_image(0, icon);
-	// display_image(32, icon);
-	// display_image(64, icon);
-	// display_image(96, icon);
-	// enable_pixel(0, 0);
-	// enable_pixel(32, 0);
-	// enable_pixel(64, 0);
-	// enable_pixel(96, 0);
-	// enable_pixel(0, 16);
-	// enable_pixel(32, 16);
-	// enable_pixel(64, 16);
-	// enable_pixel(96, 16);
-
-	// int i;
-	// for(i = 0; i < 128; i++) enable_pixel(i, 0);
-	// for(i = 0; i < 128; i++) enable_pixel(i, 8);
-	// for(i = 0; i < 128; i++) enable_pixel(i, 16);
-	// for(i = 0; i < 128; i++) enable_pixel(i, 31);
-
-	display_screen(screen);
-	display_update();
-
-	// display_update();
-	
-
 	labinit(); /* Do any lab-specific initialization */
-	
-	// int btns = getbtns();
-	// char buf[8];
-	// display_string(1, buf);
-
-	State state = MENU;
 
 	run();
 	return 0;

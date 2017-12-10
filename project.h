@@ -2,16 +2,40 @@
 /*
 	GAME
 */
+typedef enum {INITIAL, MENU, GAME, CLOSING, CREDITS} State;
+typedef struct menu_item {
+	char name[16];
+	State target;
+}menu_item;
+
+
 void clear(void);
 void update(void);
 void blip(void);
 void draw(void);
 uint8_t has_ended(void);
 void clear_collision(void);
+void start_game(void);
+void stop_game(void);
+void init_menu(void);
+void update_menu(void);
+void show_menu(void);
+void clear_menu(void);
+void run_menu(void);
+void init_game(void);
+void run_game(void);
+void clear_game(void);
+void run(void);
+void init_credits(void);
+void run_credits(void);
+void clear_credits(void);
+extern uint8_t selected_menu_item;
+extern uint8_t menu_size;
+extern menu_item menu_items[];
 
 /* Declare 2D int array used for collision detection */
 extern uint8_t collision[128][32];
-typedef enum {INITIAL, MENU, OTHER, CLOSING} State;
+
 
 /*
 	ENEMIES
@@ -30,7 +54,7 @@ uint8_t collision_check_enemy(struct enemy);
 void reset_enemy(struct enemy *);
 void update_enemies(void);
 void blip_enemies(void);
-extern struct enemy enemies[10];
+extern struct enemy enemies[];
 
 /*
 	PLAYER

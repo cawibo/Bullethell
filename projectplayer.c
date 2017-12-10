@@ -4,8 +4,6 @@
 #include "project.h"
 
 
-struct player p = {5, 10, 2, 2};
-
 void move_player(struct player *p, int i) {
 	p->y += i;
 }
