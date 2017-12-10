@@ -13,6 +13,7 @@ void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
 void display_screen(const uint8_t *data);
+void clear_screen(void);
 void enable_pixel(int x, int y);
 uint8_t spi_send_recv(uint8_t data);
 

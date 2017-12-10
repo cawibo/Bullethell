@@ -168,6 +168,10 @@ void display_screen(const uint8_t *data) {
   }
 }
 
+void clear_screen() {
+ 
+}
+
 void enable_pixel(int x, int y) {
   int sect;
   int squareX, squareY;
@@ -179,7 +183,7 @@ void enable_pixel(int x, int y) {
   bar = x%8;
   bit = y%8;
 
-  screen[128*sect + 8*4*squareY + 8*squareX + bar] |= 1;
+  screen[128*sect + 8*4*squareY + 8*squareX + bar] |= 1 << bit;
 }
 
 void display_update(void) {
