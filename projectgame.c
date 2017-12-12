@@ -3,15 +3,23 @@
 #include "mipslab.h"  /* Declatations for these labs */
 #include "project.h"
 
+// The initial state; initial is a SPLASH screen.
 State state = INITIAL;
+// The score counter
 uint8_t score = 0;
 
+/*
+	Returns a deterministically chosen "random" value.
+*/
 int pr = 1;
 int new_rnd() {
     pr = (37 * pr + 7) % 4721;
     return (int)pr;
 }
 
+/*
+	Main game loop
+*/
 void run() {
     while( 1 ) {
 		if(state == INITIAL) {
@@ -44,6 +52,7 @@ void run() {
     }
 }
 
+// if 1, will blip inverted colors on screen.
 uint8_t inverted_colors = 0;
 void run_options() {
 	display_string(0, "");
@@ -61,18 +70,28 @@ void run_options() {
 	state = MENU;
 }
 
+// The size of the menu, needs to be set before runtime.
 uint8_t menu_size = 3;
+// array of menu_item structs; first element is its showstring
+// second elements is its target state. 
 menu_item menu_items[3] = {
     {"[ ] Start Game", GAME},
 	{"[ ] Options", OPTIONS},
     {"[ ] Credits", CREDITS}
 };
+// Currently selected menu item.
 uint8_t selected_menu_item = 0;
 
+/*
+  Set initial values for menu state.  
+*/
 void init_menu() {
     selected_menu_item = 0;
 }
 
+/*
+  run loop for menu state  
+*/
 void run_menu() {
     while(state == MENU) {
         update_menu();
@@ -84,15 +103,24 @@ void run_menu() {
     state = menu_items[selected_menu_item].target;
 }
 
+/*
+  clear function for menu state.  
+*/
 void clear_menu() {
-    // clear_screen();
+    
 }
 
+/*
+  Set initial values for game state.  
+*/
 void init_game() {
 	clear_game();
 	clear_score();
 }
 
+/*
+  run loop for game state  
+*/
 void run_game() {
     uint8_t counter = 0;
     while(state == GAME) {
@@ -119,13 +147,16 @@ void run_game() {
 
         counter = (++counter % 5);
         if(counter == 0) score += 1;
-        PORTE = score;
+        PORTE = score; // sets the led light value
         delay(200);
         if(btn_3_pressed() || has_ended()) break;
     }
     state = MENU;
 }
 
+/*
+  clear game state values.  
+*/
 void clear_game() {
     // TODO store score
     // clear();
@@ -134,10 +165,16 @@ void clear_game() {
 	clear_enemies();
 }
 
+/*
+  sets initial values for credits state  
+*/
 void init_credits() {
     clear_screen();
 }
 
+/*
+  run loop for credits state.  
+*/
 void run_credits() {
     while(state == CREDITS) {
         display_string(0, "BULLETHELL");
@@ -151,10 +188,16 @@ void run_credits() {
     state = MENU;
 }
 
+/*
+  clear all values for credits state  
+*/
 void clear_credits() {
     clear_screen();
 }
 
+/*
+  List all elements in menu.
+*/
 void show_menu() {
     uint8_t i;
     for(i = 0; i < menu_size; i++) {
@@ -165,20 +208,32 @@ void show_menu() {
     display_update();
 }
 
+/*
+  Handles input during menu state.  
+*/
 void update_menu() {
     if(btn_4_pressed() && selected_menu_item > 0) selected_menu_item -= 1;
     if(btn_2_pressed() && selected_menu_item < menu_size-1) selected_menu_item += 1;
 }
 
+/*
+  Unused method for stopping game state.  
+*/
 void stop_game() {
     clear();
     state = MENU;
 }
 
+/*
+  Returns a truth value for whether game has ended or not.  
+*/
 uint8_t has_ended() {
     return check_collision_player(&p);
 }
 
+/*
+	Calls all clear methods, used after game ends.
+*/
 void clear() {
     clear_screen();
     clear_collision();
@@ -186,25 +241,40 @@ void clear() {
     clear_score();
 }
 
+/*
+	Clears the score value.
+*/
 void clear_score() {
 	score = 0;
 }
 
+/*
+  Calls update functions for the player and all enemies.  
+*/
 void update() {
     update_enemies();
     update_player(&p);
 }
 
+/*
+	Calls blip functiosn for the player and all enemimes.
+*/
 void blip() {
     blip_player(p);
     blip_enemies();
 }
 
+/*
+  Draws the screen bitmap array and update the screen.  
+*/
 void draw() {
     display_screen(screen);
     display_update();
 }
 
+/*
+	Moves all enemies to the left according to their speed.
+*/
 void move_enemies() {
     int i;
     struct enemy* ptr = enemies;
@@ -213,10 +283,16 @@ void move_enemies() {
     }
 }
 
+/*
+  Check if this coordinate has its collision bit set.  
+*/
 uint8_t check_collision_pixel(int x, int y) {
     return (collision[x][y] & 1);
 }
 
+/*
+	check wheter a rect's coordinates has any collision bits set.
+*/
 uint8_t check_collision_body(int x, int y, int width, int height) {
     int i, j;
     for(i = x - width; i <= x + width; i++) {
@@ -227,6 +303,9 @@ uint8_t check_collision_body(int x, int y, int width, int height) {
     return 0;
 }
 
+/*
+  Calls update functions for all enemies.  
+*/
 void update_enemies() {
     int i;
     struct enemy* ptr = enemies;
@@ -235,6 +314,9 @@ void update_enemies() {
     }
 }
 
+/*
+  Calls blip functions for all enemies.  
+*/
 void blip_enemies() {
     int i;
     struct enemy* ptr = enemies;
@@ -243,6 +325,10 @@ void blip_enemies() {
     }
 }
 
+/*
+  Clears all enemy values.
+  Used between games to set the starting "state".  
+*/
 void clear_enemies() {
 	int i;
 	for(i = 0; i < enemies_size; i++) {
@@ -254,7 +340,9 @@ void clear_enemies() {
 	}
 }
 
+// set amount of enemies
 const uint8_t enemies_size = 4;
+// array that holds all enemies
 struct enemy enemies[4] = {
     {0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0},
@@ -262,15 +350,16 @@ struct enemy enemies[4] = {
     {0, 0, 0, 0, 0}
 };
 
-
-
-
+/*
+  Clears the collision bitmap matrix.  
+*/
 void clear_collision() {
     int i;
     int j;
     for(i = 0; i < 128; i++) for(j = 0; j < 32; j++) collision[i][j] = 0;
 }
 
+// Collision bitmap matrix.
 uint8_t collision[128][32] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

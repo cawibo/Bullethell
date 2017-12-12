@@ -3,11 +3,20 @@
 #include "mipslab.h"  /* Declatations for these labs */
 #include "project.h"
 
-// void enemy_move_left(struct enemy *);
+/* 
+    Move this enemy left one step, ie. its speed.
+*/
 void move_left_enemy(struct enemy *e){
     e->x -= e->speed;
 }
 
+/*
+    Resets enemy coordinate to outside right edge if dead.
+    Otherwise:
+        Move one step left.
+        Set collision on the collision matrix.
+        Blip the enemy to the screen bitmap array.
+*/
 void update_enemy(struct enemy *e) {
     if(e->x + e->width < 0) reset_enemy(e);
     move_left_enemy(e);
@@ -15,7 +24,9 @@ void update_enemy(struct enemy *e) {
     blip_enemy(*e);
 }
 
-// void blip(struct enemy);
+/*
+  Blip this enemy to the screen bitmap array.  
+*/
 void blip_enemy(struct enemy e) {
     int x, y;
     for(x = e.x - e.width; x <= e.x + e.width; x++) {
@@ -25,7 +36,9 @@ void blip_enemy(struct enemy e) {
     }
 }
 
-// void collision_set_enemy(struct enemy);
+/*
+    Set collision bits on the collision bitmap array for this enemy.
+*/
 void collision_set_enemy(struct enemy e) {
     int x, y;
     for(x = e.x - e.width; x <= e.x + e.width; x++) {
@@ -39,7 +52,10 @@ void collision_set_enemy(struct enemy e) {
     }
 }
 
-// void check_collision_enemy(struct enemy);
+/*
+    Not really used, doesn't fit current structure of program.
+    Check whether this enemy collides with something else.
+*/
 uint8_t check_collision_enemy(struct enemy e) {
     int x, y;
     for(x = e.x - e.width; x <= e.x + e.width; x++) {
@@ -50,7 +66,10 @@ uint8_t check_collision_enemy(struct enemy e) {
     return 0;
 }
 
-// void reset(struct enemy *);
+/*
+    Reset all values for this enemy.
+    Except for the x coordinate, all are randomized.
+*/
 void reset_enemy(struct enemy *e) {
     score += 2;
 
